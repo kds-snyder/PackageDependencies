@@ -50,9 +50,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="PackageDependency.cs" />
     <Compile Include="PackageDependencyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PackageDependencies\PackageDependencies.csproj">
+      <Project>{0a5f7194-17db-42bf-bad5-f245063ff991}</Project>
+      <Name>PackageDependencies</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
