@@ -1,17 +1,22 @@
-﻿using System;
-
-namespace PackageDependencies.Test
+﻿namespace PackageDependencies
 {
     public class PackageDependency
     {
+        private const char PACKAGE_DEPENDENCY_DELIMITER = ':';
+
         public PackageDependency()
         {
         }
 
-        public string GetInstallListFromDependencies(string[] v)
+        public string GetInstallListFromDependencies(string[] packageDependencies)
         {
-            int indexPackageDependencyDelimiter = v[0].IndexOf(":");
-            return v[0].Substring(0, indexPackageDependencyDelimiter);
+            return parsePackage(packageDependencies[0]);            
+        }
+
+        private string parsePackage (string packageDependency)
+        {
+            int indexPackageDependencyDelimiter = packageDependency.IndexOf(PACKAGE_DEPENDENCY_DELIMITER);
+            return packageDependency.Substring(0, indexPackageDependencyDelimiter);
         }
     }
 }
