@@ -17,5 +17,19 @@ namespace PackageDependencies.Test
             // Assert
             Assert.AreEqual(installList, "NLog");
         }
+
+        [TestMethod]
+        public void TwoDependentPairsReturnsCorrectOrder()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies
+                (new string[] { "NLog.Config: NLog", "NLog: " });
+
+            // Assert
+            Assert.AreEqual(installList, "NLog, NLog.Config");
+        }
     }
 }
