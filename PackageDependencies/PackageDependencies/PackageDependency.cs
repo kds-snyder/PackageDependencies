@@ -3,14 +3,15 @@
     public class PackageDependency
     {
         private const char PACKAGE_DEPENDENCY_DELIMITER = ':';
+        private const int PACKAGE_DEPENDENCY_OFFSET = 2;
 
         public PackageDependency()
         {
         }
 
-        public string GetInstallListFromDependencies(string[] packageDependencies)
+        public string GetInstallListFromDependencies(string[] packageDependencyPairs)
         {         
-            var parsedPackageDependencyPair = parsePackage(packageDependencies[0]);
+            var parsedPackageDependencyPair = parsePackageDependencPair(packageDependencyPairs[0]);
 
             if (parsedPackageDependencyPair.NeededPackage != null)
             {
@@ -22,17 +23,17 @@
             }                  
         }
 
-        private ParsedPackageDependencyPair parsePackage (string packageDependency)
+        private ParsedPackageDependencyPair parsePackageDependencPair(string packageDependencyPair)
         {
             var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
 
-            int indexPackageDependencyDelimiter = packageDependency.IndexOf(PACKAGE_DEPENDENCY_DELIMITER);
+            int indexPackageDependencyDelimiter = packageDependencyPair.IndexOf(PACKAGE_DEPENDENCY_DELIMITER);
 
-            parsedPackageDependencyPair.MainPackage = packageDependency.Substring(0, indexPackageDependencyDelimiter);
-            if (indexPackageDependencyDelimiter + 2 < packageDependency.Length)
+            parsedPackageDependencyPair.MainPackage = packageDependencyPair.Substring(0, indexPackageDependencyDelimiter);
+            if (indexPackageDependencyDelimiter + PACKAGE_DEPENDENCY_OFFSET < packageDependencyPair.Length)
             {
-                parsedPackageDependencyPair.NeededPackage = 
-                    packageDependency.Substring(indexPackageDependencyDelimiter + 2);
+                parsedPackageDependencyPair.NeededPackage =
+                    packageDependencyPair.Substring(indexPackageDependencyDelimiter + PACKAGE_DEPENDENCY_OFFSET);
             }
 
             return parsedPackageDependencyPair;
