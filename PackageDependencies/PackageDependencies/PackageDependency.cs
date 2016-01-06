@@ -9,33 +9,33 @@
         }
 
         public string GetInstallListFromDependencies(string[] packageDependencies)
-        {
-            string neededPackage;
+        {         
+            var parsedPackageDependencyPair = parsePackage(packageDependencies[0]);
 
-            string mainPackage = parsePackage(packageDependencies[0], out neededPackage);
-
-            if (neededPackage != null)
+            if (parsedPackageDependencyPair.NeededPackage != null)
             {
-                return neededPackage + ", " + mainPackage;
+                return parsedPackageDependencyPair.NeededPackage + ", " + parsedPackageDependencyPair.MainPackage;
             }
             else
             {
-                return mainPackage;
+                return parsedPackageDependencyPair.MainPackage;
             }                  
         }
 
-        private string parsePackage (string packageDependency, out string neededPackage)
+        private ParsedPackageDependencyPair parsePackage (string packageDependency)
         {
+            var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
+
             int indexPackageDependencyDelimiter = packageDependency.IndexOf(PACKAGE_DEPENDENCY_DELIMITER);
+
+            parsedPackageDependencyPair.MainPackage = packageDependency.Substring(0, indexPackageDependencyDelimiter);
             if (indexPackageDependencyDelimiter + 2 < packageDependency.Length)
             {
-                neededPackage = packageDependency.Substring(indexPackageDependencyDelimiter + 2);
+                parsedPackageDependencyPair.NeededPackage = 
+                    packageDependency.Substring(indexPackageDependencyDelimiter + 2);
             }
-            else
-            {
-                neededPackage = null;
-            }
-            return packageDependency.Substring(0, indexPackageDependencyDelimiter);
+
+            return parsedPackageDependencyPair;
         }
     }
 }
