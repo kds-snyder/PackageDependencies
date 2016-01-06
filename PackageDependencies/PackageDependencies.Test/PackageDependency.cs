@@ -10,7 +10,8 @@ namespace PackageDependencies.Test
 
         internal string GetInstallListFromDependencies(string[] v)
         {
-            throw new NotImplementedException();
+            int indexPackageDependencyDelimiter = v[0].IndexOf(":");
+            return v[0].Substring(0, indexPackageDependencyDelimiter);
         }
     }
 }
