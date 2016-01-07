@@ -39,7 +39,7 @@ namespace PackageDependencies
             {
                 if (!_packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
                 {
-                    _packageDependencyList.Add(parsedPackageDependencyPair.NeededPackage);
+                    _packageDependencyList.Insert(0, parsedPackageDependencyPair.NeededPackage);
                 }               
             }
 
