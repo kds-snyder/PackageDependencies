@@ -10,16 +10,31 @@ namespace PackageDependencies
 
         public string GetInstallListFromDependencies(string[] packageDependencyPairs)
         {
-            var parsedPackageDependencyPair = Parse.Instance.ParsePackageDependencPair(packageDependencyPairs[0]);
+            List<string> packageDependencyList = new List<string>();
 
-            if (parsedPackageDependencyPair.NeededPackage != null)
+            var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
+
+            for (int i = 0; i < packageDependencyPairs.Length; i++)
             {
-                return parsedPackageDependencyPair.NeededPackage + ", " + parsedPackageDependencyPair.MainPackage;
+                parsedPackageDependencyPair = Parse.Instance.ParsePackageDependencPair(packageDependencyPairs[i]);
+
+                if (parsedPackageDependencyPair.NeededPackage != null)
+                {
+                    if (!packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
+                    {
+                        packageDependencyList.Add(parsedPackageDependencyPair.NeededPackage);
+                    }                    
+                }
+
+                if (!packageDependencyList.Contains(parsedPackageDependencyPair.MainPackage))
+                {
+                    packageDependencyList.Add(parsedPackageDependencyPair.MainPackage);
+                }
+                    
             }
-            else
-            {
-                return parsedPackageDependencyPair.MainPackage;
-            }
+
+            return string.Join(", ", packageDependencyList.ToArray());
+
         }
     }
 }
