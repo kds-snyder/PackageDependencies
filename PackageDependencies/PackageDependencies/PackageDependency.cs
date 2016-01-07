@@ -40,15 +40,13 @@ namespace PackageDependencies
                 if (!_packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
                 {
                     _packageDependencyList.Add(parsedPackageDependencyPair.NeededPackage);
-                }
-               
+                }               
             }
 
             if (!_packageDependencyList.Contains(parsedPackageDependencyPair.MainPackage))
             {
                 _packageDependencyList.Add(parsedPackageDependencyPair.MainPackage);
-            }
-              
+            }              
         }
     }
 }
