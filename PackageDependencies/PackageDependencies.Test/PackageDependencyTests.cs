@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace PackageDependencies.Test
 {
@@ -58,6 +59,20 @@ namespace PackageDependencies.Test
 
             // Assert
             Assert.AreEqual(installList, "NLog.HTTP, NLog.Test, NLog.Web");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception),
+         "The input package dependencies cause a dependency cycle")]
+        public void TwoPackagesDependencyCycleThrowsException()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    { "NLog.Config: NLog", "NLog:Config" });
+
         }
     }
 }
