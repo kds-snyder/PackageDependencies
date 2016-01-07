@@ -36,17 +36,31 @@ namespace PackageDependencies
 
         private void storeParsedPackageDependencyPair(ParsedPackageDependencyPair parsedPackageDependencyPair)
         {
+            int indexMainPackage = 0;
+            int indexNeededPackage = 0;
+
             if (parsedPackageDependencyPair.NeededPackage != null)
             {
                 if (!_packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
                 {
                     _packageDependencyList.Insert(0, parsedPackageDependencyPair.NeededPackage);
                 }
+
+                indexNeededPackage =
+                 _packageDependencyList.IndexOf(parsedPackageDependencyPair.NeededPackage);
             }
 
             if (!_packageDependencyList.Contains(parsedPackageDependencyPair.MainPackage))
             {
                 _packageDependencyList.Add(parsedPackageDependencyPair.MainPackage);
+            }
+
+            indexMainPackage =
+                 _packageDependencyList.IndexOf(parsedPackageDependencyPair.MainPackage);
+
+            if (indexNeededPackage > indexMainPackage)
+            {
+                throw new Exception("The input package dependencies cause a dependency cycle");
             }
         }
     }
