@@ -71,7 +71,7 @@ namespace PackageDependencies.Test
 
             // Act  
             string installList = packageDependency.GetInstallListFromDependencies(new string[]
-                                    { "NLog.Config: NLog", "NLog:Config" });
+                                    { "NLog.Config: NLog.Test", "NLog.Test: NLog:Config" });
 
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PackageDependencies
 {
@@ -14,7 +15,7 @@ namespace PackageDependencies
         }
 
         public string GetInstallListFromDependencies(string[] packageDependencyPairs)
-        {           
+        {
             var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
 
             for (int i = 0; i < packageDependencyPairs.Length; i++)
@@ -40,13 +41,13 @@ namespace PackageDependencies
                 if (!_packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
                 {
                     _packageDependencyList.Insert(0, parsedPackageDependencyPair.NeededPackage);
-                }               
+                }
             }
 
             if (!_packageDependencyList.Contains(parsedPackageDependencyPair.MainPackage))
             {
                 _packageDependencyList.Add(parsedPackageDependencyPair.MainPackage);
-            }              
+            }
         }
     }
 }
