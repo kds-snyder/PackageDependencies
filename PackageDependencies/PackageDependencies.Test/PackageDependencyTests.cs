@@ -31,5 +31,19 @@ namespace PackageDependencies.Test
             // Assert
             Assert.AreEqual(installList, "NLog, NLog.Config");
         }
+
+        [TestMethod]
+        public void ThreePackagesOneDependencyReturnsCorrectOrder()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies
+                (new string[] {"NLog.Config: NLog", "EntityFramework: ", "NLog: "});
+
+            // Assert
+            Assert.AreEqual(installList, "NLog, NLog.Config, EntityFramework");
+        }
     }
 }
