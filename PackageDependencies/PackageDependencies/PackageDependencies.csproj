@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="PackageDependency.cs" />
     <Compile Include="ParsedPackageDependencyPair.cs" />
+    <Compile Include="Parse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
