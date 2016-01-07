@@ -4,37 +4,51 @@ namespace PackageDependencies
 {
     public class PackageDependency
     {
+        private const string PACKAGE_INSTALL_LIST_DELIMITER = ", ";
+
+        private List<string> _packageDependencyList;
+
         public PackageDependency()
         {
+            _packageDependencyList = new List<string>();
         }
 
         public string GetInstallListFromDependencies(string[] packageDependencyPairs)
-        {
-            List<string> packageDependencyList = new List<string>();
-
+        {           
             var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
 
             for (int i = 0; i < packageDependencyPairs.Length; i++)
             {
-                parsedPackageDependencyPair = Parse.Instance.ParsePackageDependencPair(packageDependencyPairs[i]);
+                parsedPackageDependencyPair = Parse.ParsePackageDependencPair(packageDependencyPairs[i]);
 
-                if (parsedPackageDependencyPair.NeededPackage != null)
-                {
-                    if (!packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
-                    {
-                        packageDependencyList.Add(parsedPackageDependencyPair.NeededPackage);
-                    }                    
-                }
-
-                if (!packageDependencyList.Contains(parsedPackageDependencyPair.MainPackage))
-                {
-                    packageDependencyList.Add(parsedPackageDependencyPair.MainPackage);
-                }
-                    
+                storeParsedPackageDependencyPair(parsedPackageDependencyPair);
             }
 
-            return string.Join(", ", packageDependencyList.ToArray());
+            return extractPackageInstallList();
 
+        }
+
+        private string extractPackageInstallList()
+        {
+            return string.Join(PACKAGE_INSTALL_LIST_DELIMITER, _packageDependencyList.ToArray());
+        }
+
+        private void storeParsedPackageDependencyPair(ParsedPackageDependencyPair parsedPackageDependencyPair)
+        {
+            if (parsedPackageDependencyPair.NeededPackage != null)
+            {
+                if (!_packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
+                {
+                    _packageDependencyList.Add(parsedPackageDependencyPair.NeededPackage);
+                }
+               
+            }
+
+            if (!_packageDependencyList.Contains(parsedPackageDependencyPair.MainPackage))
+            {
+                _packageDependencyList.Add(parsedPackageDependencyPair.MainPackage);
+            }
+              
         }
     }
 }

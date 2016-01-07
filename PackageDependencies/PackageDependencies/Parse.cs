@@ -4,10 +4,8 @@
     {
         private const char PACKAGE_DEPENDENCY_DELIMITER = ':';
         private const int PACKAGE_DEPENDENCY_OFFSET = 2;
-
-        public static Parse Instance => new Parse();
-
-        public ParsedPackageDependencyPair ParsePackageDependencPair(string packageDependencyPair)
+       
+        public static ParsedPackageDependencyPair ParsePackageDependencPair(string packageDependencyPair)
         {
             var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
 

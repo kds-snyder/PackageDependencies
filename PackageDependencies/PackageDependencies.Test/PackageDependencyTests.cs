@@ -19,7 +19,7 @@ namespace PackageDependencies.Test
         }
 
         [TestMethod]
-        public void TwoDependentPairsReturnsCorrectOrder()
+        public void TwoPackagesOneDependencyReturnsCorrectOrder()
         {
             // Arrange
             var packageDependency = new PackageDependency();
