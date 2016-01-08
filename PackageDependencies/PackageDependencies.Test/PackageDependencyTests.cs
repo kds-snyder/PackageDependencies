@@ -48,7 +48,7 @@ namespace PackageDependencies.Test
         }
 
         [TestMethod]
-        public void FourPackagesTwoDependenciesReturnsCorrectOrder()
+        public void ThreePackagesTwoDependenciesReturnsCorrectOrder()
         {
             // Arrange
             var packageDependency = new PackageDependency();
@@ -73,6 +73,7 @@ namespace PackageDependencies.Test
             string installList = packageDependency.GetInstallListFromDependencies(new string[]
                                     { "NLog.Config: NLog.Test", "NLog.Test: NLog.Config" });
 
-        }
+        }       
     }
+    
 }
