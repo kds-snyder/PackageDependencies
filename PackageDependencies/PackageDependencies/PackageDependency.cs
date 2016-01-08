@@ -7,16 +7,20 @@ namespace PackageDependencies
     {
         private const string PACKAGE_INSTALL_LIST_DELIMITER = ", ";
 
-        private List<string> _packageDependencyList;
-
+        private PackageDependencyBranch _packageDependencyBranch;
+     
+        private List<PackageDependencyBranch> _packageDependencyTree;
+        
         public PackageDependency()
         {
-            _packageDependencyList = new List<string>();
+            _packageDependencyTree = new List<PackageDependencyBranch>();
+            _packageDependencyBranch = new PackageDependencyBranch();
+            _packageDependencyTree.Add(_packageDependencyBranch);
         }
 
         public string GetInstallListFromDependencies(string[] packageDependencyPairs)
         {
-            var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
+            var parsedPackageDependencyPair = new ParsedPackageDependencyPair();            
 
             for (int i = 0; i < packageDependencyPairs.Length; i++)
             {
@@ -39,11 +43,11 @@ namespace PackageDependencies
             if (parsedPackageDependencyPair.NeededPackage != null)
             {
                 indexNeededPackage =
-                 _packageDependencyList.IndexOf(parsedPackageDependencyPair.NeededPackage);
+                 _packageDependencyBranch.Packages.IndexOf(parsedPackageDependencyPair.NeededPackage);
             }
 
             indexMainPackage =
-                _packageDependencyList.IndexOf(parsedPackageDependencyPair.MainPackage);
+                _packageDependencyBranch.Packages.IndexOf(parsedPackageDependencyPair.MainPackage);
 
             if (indexNeededPackage > indexMainPackage)
             {
@@ -53,22 +57,22 @@ namespace PackageDependencies
 
         private string extractPackageInstallList()
         {
-            return string.Join(PACKAGE_INSTALL_LIST_DELIMITER, _packageDependencyList.ToArray());
+            return string.Join(PACKAGE_INSTALL_LIST_DELIMITER, _packageDependencyBranch.Packages.ToArray());
         }
 
         private void storeParsedPackageDependencyPair(ParsedPackageDependencyPair parsedPackageDependencyPair)
         {           
             if (parsedPackageDependencyPair.NeededPackage != null)
             {
-                if (!_packageDependencyList.Contains(parsedPackageDependencyPair.NeededPackage))
+                if (!_packageDependencyBranch.Packages.Contains(parsedPackageDependencyPair.NeededPackage))
                 {
-                    _packageDependencyList.Insert(0, parsedPackageDependencyPair.NeededPackage);
+                    _packageDependencyBranch.Packages.Insert(0, parsedPackageDependencyPair.NeededPackage);
                 }                
             }
 
-            if (!_packageDependencyList.Contains(parsedPackageDependencyPair.MainPackage))
+            if (!_packageDependencyBranch.Packages.Contains(parsedPackageDependencyPair.MainPackage))
             {
-                _packageDependencyList.Add(parsedPackageDependencyPair.MainPackage);
+                _packageDependencyBranch.Packages.Add(parsedPackageDependencyPair.MainPackage);
             }           
         }
     }

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PackageDependency.cs" />
+    <Compile Include="PackageDependencyBranch.cs" />
     <Compile Include="ParsedPackageDependencyPair.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
