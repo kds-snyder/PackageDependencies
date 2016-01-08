@@ -62,6 +62,21 @@ namespace PackageDependencies.Test
         }
 
         [TestMethod]
+        public void FourPackagesThreeDependenciesMixedOrderReturnsCorrectOrder()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    { "NLog.HTTP: NLog.Test", "NLog.Config: ",
+                                        "NLog.Test: NLog.Web", "NLog.Web: NLog.Config"});            
+
+            // Assert
+            Assert.AreEqual(installList, "NLog.Config, NLog.Web, NLog.Test, NLog.HTTP, NLog");
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(Exception),
          "The input package dependencies cause a dependency cycle")]
         public void TwoPackagesDependencyCycleThrowsException()
