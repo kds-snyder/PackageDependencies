@@ -73,7 +73,7 @@ namespace PackageDependencies.Test
                                         "NLog.Test: NLog.Web", "NLog.Web: NLog.Config"});            
 
             // Assert
-            Assert.AreEqual(installList, "NLog.Config, NLog.Web, NLog.Test, NLog.HTTP, NLog");
+            Assert.AreEqual(installList, "NLog.Config, NLog.Web, NLog.Test, NLog.HTTP");
         }
 
         [TestMethod]
