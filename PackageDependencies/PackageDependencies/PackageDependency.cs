@@ -93,6 +93,10 @@ namespace PackageDependencies
             {
                 addPackageBranch(tree, parsedPackageDependencyPair);
             }
+            else
+            {
+                Branch.Append(branchNeededPackage, parsedPackageDependencyPair.MainPackage);
+            }
         }
 
         private void storeParsedPackageDependencyPair
