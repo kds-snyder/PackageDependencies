@@ -8,7 +8,7 @@ namespace PackageDependencies
         public string GetInstallListFromDependencies(string[] packageDependencyPairs)
         {
             var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
-            var packageDependencyTree = new PackageDependencyTree();
+            var packageDependencyTree = new Tree();
 
             for (int i = 0; i < packageDependencyPairs.Length; i++)
             {
@@ -17,21 +17,21 @@ namespace PackageDependencies
                 storeParsedPackageDependencyPair(packageDependencyTree, parsedPackageDependencyPair);
             }
 
-            return PackageDependencyTree.ExtractPackageTreeInstallList(packageDependencyTree);
+            return Tree.ExtractTreeDelimitedList(packageDependencyTree);
         }
 
-        private void checkForDependencyCycle(PackageDependencyBranch branch,
+        private void checkForDependencyCycle(Branch branch,
                                 ParsedPackageDependencyPair parsedPackageDependencyPair)
         {
             int indexMainPackage =
-                PackageDependencyBranch.GetPackageIndex(branch, parsedPackageDependencyPair.MainPackage);
+                Branch.GetIndex(branch, parsedPackageDependencyPair.MainPackage);
 
             int indexNeededPackage = 0;
 
             if (parsedPackageDependencyPair.NeededPackage != null)
             {
                 indexNeededPackage =
-                 PackageDependencyBranch.GetPackageIndex(branch, parsedPackageDependencyPair.NeededPackage);
+                 Branch.GetIndex(branch, parsedPackageDependencyPair.NeededPackage);
             }            
 
             if (indexNeededPackage > indexMainPackage)
@@ -41,20 +41,20 @@ namespace PackageDependencies
         }        
 
         private void storeParsedPackageDependencyPair
-            (PackageDependencyTree tree, ParsedPackageDependencyPair parsedPackageDependencyPair)
+            (Tree tree, ParsedPackageDependencyPair parsedPackageDependencyPair)
         {
-            PackageDependencyBranch branchMainPackage = 
-                PackageDependencyTree.GetBranchInTree(tree, parsedPackageDependencyPair.MainPackage);
-            PackageDependencyBranch branchNeededPackage;
+            Branch branchMainPackage = 
+                Tree.GetBranch(tree, parsedPackageDependencyPair.MainPackage);
+            Branch branchNeededPackage;
 
             // If there is no needed package and main package is not in tree, add main package in new branch
             if (parsedPackageDependencyPair.NeededPackage == null)
             {
                 if (branchMainPackage == null)
                 {
-                    branchMainPackage = new PackageDependencyBranch();
-                    PackageDependencyBranch.AppendPackage(branchMainPackage, parsedPackageDependencyPair.MainPackage);
-                    PackageDependencyTree.AppendBranch(tree, branchMainPackage);
+                    branchMainPackage = new Branch();
+                    Branch.Append(branchMainPackage, parsedPackageDependencyPair.MainPackage);
+                    Tree.Append(tree, branchMainPackage);
                 }
             }
 
@@ -62,7 +62,7 @@ namespace PackageDependencies
             else
             {
                 branchNeededPackage = 
-                    PackageDependencyTree.GetBranchInTree(tree, parsedPackageDependencyPair.NeededPackage);
+                    Tree.GetBranch(tree, parsedPackageDependencyPair.NeededPackage);
 
                 // If needed package and main package are in tree:
                 //  If in same branch, check for dependency cycle
@@ -77,16 +77,14 @@ namespace PackageDependencies
                         }
                         else
                         {
-                            PackageDependencyTree.RemoveBranch(tree, branchNeededPackage);
-                            PackageDependencyTree.RemoveBranch(tree, branchNeededPackage);
-                            PackageDependencyTree.InsertBranch(tree, branchNeededPackage);
+                            Tree.Remove(tree, branchNeededPackage);                            
+                            Tree.Insert(tree, branchNeededPackage);
                         }
                     }
                     // Main package is not in tree; add it to needed package branch
                     else
                     {
-                        PackageDependencyBranch.AppendPackage
-                            (branchNeededPackage, parsedPackageDependencyPair.MainPackage);
+                        Branch.Append(branchNeededPackage, parsedPackageDependencyPair.MainPackage);
                     }
                 }
 
@@ -97,17 +95,14 @@ namespace PackageDependencies
                 {
                     if (branchMainPackage != null)
                     {
-                        PackageDependencyBranch.InsertPackage
-                            (branchMainPackage, parsedPackageDependencyPair.NeededPackage);
+                        Branch.Insert(branchMainPackage, parsedPackageDependencyPair.NeededPackage);
                     }
                     else
                     {
-                        branchMainPackage = new PackageDependencyBranch();
-                        PackageDependencyBranch.AppendPackage
-                            (branchMainPackage, parsedPackageDependencyPair.NeededPackage);
-                        PackageDependencyBranch.AppendPackage
-                            (branchMainPackage, parsedPackageDependencyPair.MainPackage);
-                        PackageDependencyTree.AppendBranch(tree, branchMainPackage);
+                        branchMainPackage = new Branch();
+                        Branch.Append(branchMainPackage, parsedPackageDependencyPair.NeededPackage);
+                        Branch.Append(branchMainPackage, parsedPackageDependencyPair.MainPackage);
+                        Tree.Append(tree, branchMainPackage);
                     }
                 }
             }
