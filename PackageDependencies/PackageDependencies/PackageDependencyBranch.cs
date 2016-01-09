@@ -4,36 +4,36 @@ namespace PackageDependencies
 {
     public class PackageDependencyBranch
     {
-        public List<string> Packages;
+        private List<string> _packages;
 
         public PackageDependencyBranch()
         {
-            Packages = new List<string>();
+            _packages = new List<string>();
         }
 
         public static void AppendPackage(PackageDependencyBranch branch, string package)
         {
-            branch.Packages.Add(package);
+            branch._packages.Add(package);
         }
 
         public static string ExtractPackageBranchInstallList(PackageDependencyBranch branch, string delimiter)
         {
-            return string.Join(delimiter, branch.Packages.ToArray());                                                                    
+            return string.Join(delimiter, branch._packages.ToArray());                                                                    
         }
 
         public static int GetPackageIndex(PackageDependencyBranch branch, string package)
         {
-            return branch.Packages.IndexOf(package);
+            return branch._packages.IndexOf(package);
         }
 
         public static void InsertPackage(PackageDependencyBranch branch, string package)
         {
-            branch.Packages.Insert(0, package);
+            branch._packages.Insert(0, package);
         }
 
         public static bool IsInBranch(PackageDependencyBranch branch, string package)
         {
-            return branch.Packages.Contains(package);
+            return branch._packages.Contains(package);
         }
     }
 }

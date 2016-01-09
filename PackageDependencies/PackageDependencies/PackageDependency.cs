@@ -4,29 +4,20 @@ using System.Collections.Generic;
 namespace PackageDependencies
 {
     public class PackageDependency
-    {
-        private const string PACKAGE_INSTALL_LIST_DELIMITER = ", ";
-
-        private List<PackageDependencyBranch> _packageDependencyTree;
-
-        public PackageDependency()
-        {
-            _packageDependencyTree = new List<PackageDependencyBranch>();
-        }
-
+    { 
         public string GetInstallListFromDependencies(string[] packageDependencyPairs)
         {
             var parsedPackageDependencyPair = new ParsedPackageDependencyPair();
+            var packageDependencyTree = new PackageDependencyTree();
 
             for (int i = 0; i < packageDependencyPairs.Length; i++)
             {
                 parsedPackageDependencyPair = Parse.ParsePackageDependencPair(packageDependencyPairs[i]);
 
-                storeParsedPackageDependencyPair(parsedPackageDependencyPair);
-
+                storeParsedPackageDependencyPair(packageDependencyTree, parsedPackageDependencyPair);
             }
 
-            return extractPackageTreeInstallList();
+            return PackageDependencyTree.ExtractPackageTreeInstallList(packageDependencyTree);
         }
 
         private void checkForDependencyCycle(PackageDependencyBranch branch,
@@ -47,40 +38,13 @@ namespace PackageDependencies
             {
                 throw new Exception("The input package dependencies cause a dependency cycle");
             }
-        }
+        }        
 
-        private string extractPackageTreeInstallList()
+        private void storeParsedPackageDependencyPair
+            (PackageDependencyTree tree, ParsedPackageDependencyPair parsedPackageDependencyPair)
         {
-            string result = "";
-
-            foreach (var branch in _packageDependencyTree)
-            {
-                result += PackageDependencyBranch.ExtractPackageBranchInstallList(branch, PACKAGE_INSTALL_LIST_DELIMITER)
-                                                                    + PACKAGE_INSTALL_LIST_DELIMITER;
-            }
-
-            if (result.Length > PACKAGE_INSTALL_LIST_DELIMITER.Length)
-            {
-                result = result.Substring(0, result.Length - 2);
-            }
-            return result;
-        }
-
-        public PackageDependencyBranch getBranchInTree(string package)
-        {
-            foreach (var branch in _packageDependencyTree)
-            {
-                if (PackageDependencyBranch.IsInBranch(branch, package))
-                {
-                    return branch;
-                }
-            }
-            return null;
-        }
-
-        private void storeParsedPackageDependencyPair(ParsedPackageDependencyPair parsedPackageDependencyPair)
-        {
-            PackageDependencyBranch branchMainPackage = getBranchInTree(parsedPackageDependencyPair.MainPackage);
+            PackageDependencyBranch branchMainPackage = 
+                PackageDependencyTree.GetBranchInTree(tree, parsedPackageDependencyPair.MainPackage);
             PackageDependencyBranch branchNeededPackage;
 
             // If there is no needed package and main package is not in tree, add main package in new branch
@@ -90,14 +54,15 @@ namespace PackageDependencies
                 {
                     branchMainPackage = new PackageDependencyBranch();
                     PackageDependencyBranch.AppendPackage(branchMainPackage, parsedPackageDependencyPair.MainPackage);
-                    _packageDependencyTree.Add(branchMainPackage);
+                    PackageDependencyTree.AppendBranch(tree, branchMainPackage);
                 }
             }
 
             // Needed package exists
             else
             {
-                branchNeededPackage = getBranchInTree(parsedPackageDependencyPair.NeededPackage);
+                branchNeededPackage = 
+                    PackageDependencyTree.GetBranchInTree(tree, parsedPackageDependencyPair.NeededPackage);
 
                 // If needed package and main package are in tree:
                 //  If in same branch, check for dependency cycle
@@ -112,8 +77,9 @@ namespace PackageDependencies
                         }
                         else
                         {
-                            _packageDependencyTree.Remove(branchNeededPackage);
-                            _packageDependencyTree.Insert(0, branchNeededPackage);
+                            PackageDependencyTree.RemoveBranch(tree, branchNeededPackage);
+                            PackageDependencyTree.RemoveBranch(tree, branchNeededPackage);
+                            PackageDependencyTree.InsertBranch(tree, branchNeededPackage);
                         }
                     }
                     // Main package is not in tree; add it to needed package branch
@@ -141,7 +107,7 @@ namespace PackageDependencies
                             (branchMainPackage, parsedPackageDependencyPair.NeededPackage);
                         PackageDependencyBranch.AppendPackage
                             (branchMainPackage, parsedPackageDependencyPair.MainPackage);
-                        _packageDependencyTree.Add(branchMainPackage);
+                        PackageDependencyTree.AppendBranch(tree, branchMainPackage);
                     }
                 }
             }
