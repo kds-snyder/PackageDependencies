@@ -77,6 +77,22 @@ namespace PackageDependencies.Test
         }
 
         [TestMethod]
+        public void SixPackagesFourDependenciesMixedOrderReturnsCorrectOrde()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    {"KittenService: ", "Leetmeme: Cyberportal", "Cyberportal: Ice",
+                                                "CamelCaser: KittenService","Fraudstream: Leetmeme", "Ice: "});
+
+            // Assert
+            Assert.AreEqual(installList, "KittenService, CamelCaser, Ice, Cyberportal, Leetmeme, Fraudstream");
+        }
+
+
+        [TestMethod]
         [ExpectedException(typeof(Exception),
          "The input package dependencies cause a dependency cycle")]
         public void TwoPackagesDependencyCycleThrowsException()
@@ -87,8 +103,36 @@ namespace PackageDependencies.Test
             // Act  
             string installList = packageDependency.GetInstallListFromDependencies(new string[]
                                     { "NLog.Config: NLog.Test", "NLog.Test: NLog.Config" });
+        }
 
-        }       
+        [TestMethod]
+        [ExpectedException(typeof(Exception),
+         "The input package dependencies cause a dependency cycle")]
+        public void FourPackagesDependencyCycleThrowsException()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    { "NLog.Config: NLog.Test", "NLog.Test: NLog.Web" ,
+                                        "NLog.Web: NLog.HTTP", "NLog.HTTP: NLog.Config" });
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception),
+             "The input package dependencies cause a dependency cycle")]
+        public void SeveralPackagesDependencyCycle()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    { "KittenService: ", "Leetmeme: Cyberportal", "Cyberportal: Ice",
+                                "CamelCaser: KittenService","Fraudstream: ","Ice: Leetmeme" });
+        }
     }
     
 }
