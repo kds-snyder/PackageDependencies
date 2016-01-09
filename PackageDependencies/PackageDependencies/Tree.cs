@@ -48,6 +48,11 @@ namespace PackageDependencies
             return null;
         }
 
+        public static int GetIndex(Tree tree, Branch branch)
+        {
+            return tree._branches.IndexOf(branch);
+        }
+
         public static void Insert(Tree tree, Branch branch)
         {
             tree._branches.Insert(0, branch);
