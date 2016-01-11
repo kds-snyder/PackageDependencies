@@ -92,6 +92,35 @@ namespace PackageDependencies.Test
         }
 
         [TestMethod]
+        public void FivePackagesNoDependenciesReturnsCorrectOrder()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    { "NLog: ", "EntityFramework: ", "AspNet.WebAPI: ", "Owin: ", "Ice: "});
+
+            // Assert
+            Assert.AreEqual(installList, "NLog, EntityFramework, AspNet.WebAPI, Owin, Ice");
+        }
+
+        [TestMethod]
+        public void FivePackagesSomeDependenciesReturnsCorrectOrder()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    {"Owin: ", "NLog.Config: NLog", "Owin.Identity: Owin", "NLog: ",
+                                     "NLog.Web: NLog.Config"});
+
+            // Assert
+            Assert.AreEqual(installList, "Owin, Owin.Identity, NLog, NLog.Config, NLog.Web");
+        }
+
+        [TestMethod]
         public void SixPackagesFourDependenciesMixedOrderReturnsCorrectOrde()
         {
             // Arrange
@@ -106,6 +135,23 @@ namespace PackageDependencies.Test
             Assert.AreEqual(installList, "KittenService, CamelCaser, Ice, Cyberportal, Leetmeme, Fraudstream");
         }
 
+        [TestMethod]
+        public void SeveralPackagesSeveralDependenciesMixedOrderReturnsCorrectOrde()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    {"Owin: ", "EntityFramework: ", "Identity.EntityFramework: EntityFramework",
+                                     "Owin.Identity: Owin","AspNet.WebAPI: AspNet.HTTP", "WebClient: ",
+                                     "AspNet.HTTP: WebClient", "NLog.HTTP: NLog.Web", "NLog.Config: ",
+                                     "NLog.Test: NLog.HTTP", "NLog.Web: NLog.Config"});
+
+            // Assert
+            Assert.AreEqual(installList,
+             "NLog.Config, WebClient, Owin, Owin.Identity, EntityFramework, Identity.EntityFramework, AspNet.HTTP, AspNet.WebAPI, NLog.Web, NLog.HTTP, NLog.Test");
+        }
 
         [TestMethod]
         [ExpectedException(typeof(Exception),
