@@ -148,6 +148,19 @@ namespace PackageDependencies.Test
                                     { "KittenService: ", "Leetmeme: Cyberportal", "Cyberportal: Ice",
                                 "CamelCaser: KittenService","Fraudstream: ","Ice: Leetmeme" });
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception),
+         "The input package dependencies are not in the correct format")]
+        public void InputFormatIncorrectThrowsException()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    { "NLog.Config", "NLog.Test: NLog.Config" });
+        }
     }
     
 }
