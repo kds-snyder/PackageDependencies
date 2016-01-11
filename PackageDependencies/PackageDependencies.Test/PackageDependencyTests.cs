@@ -62,6 +62,21 @@ namespace PackageDependencies.Test
         }
 
         [TestMethod]
+        public void FourPackagesTwoDependenciesMixedOrderReturnsCorrectOrder()
+        {
+            // Arrange
+            var packageDependency = new PackageDependency();
+
+            // Act  
+            string installList = packageDependency.GetInstallListFromDependencies(new string[]
+                                    { "NLog.Config: ", "NLog.Test: NLog.Web", "EntityFramework",
+                                         "NLog.Web: NLog.Config"});
+
+            // Assert
+            Assert.AreEqual(installList, "NLog.Config, NLog.Web, NLog.Test, EntityFramework");
+        }
+
+        [TestMethod]
         public void FourPackagesThreeDependenciesMixedOrderReturnsCorrectOrder()
         {
             // Arrange
