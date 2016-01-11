@@ -69,7 +69,7 @@ namespace PackageDependencies.Test
 
             // Act  
             string installList = packageDependency.GetInstallListFromDependencies(new string[]
-                                    { "NLog.Config: ", "NLog.Test: NLog.Web", "EntityFramework",
+                                    { "NLog.Config: ", "NLog.Test: NLog.Web", "EntityFramework: ",
                                          "NLog.Web: NLog.Config"});
 
             // Assert
